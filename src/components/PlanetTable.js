@@ -5,7 +5,7 @@ function PlanetTable(props) {
     const { planetCollection } = props;
     return (
         <div className="six colums">
-            <table id="tableBooks" class="u-full-width">
+            <table id="tableBooks" className="u-full-width">
                 <thead>
                     <tr>
                         <th>Nombre</th>

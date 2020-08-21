@@ -13,7 +13,7 @@ class App extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  /*async componentDidMount() {
     try{
       const planetOne = await (await axios.get('https://swapi.dev/api/planets/1/')).data;
       const newPlanet = new Planet(planetOne.name, planetOne.terrain, planetOne.rotation_period > 24);
@@ -22,24 +22,24 @@ class App extends React.Component {
     catch(e){
       console.log('Error al descargar el planeta: ' + e);
     }
-  };
+  };*/
 
   async fetchPlanetById(id) {
-    try{
-      const fetchPlanet = await axios.get(`https://swapi.dev/api/planets/${id}/`);
-      const { name, terrain, rotation_period } = fetchPlanet.data;
-      const newPlanet = new Planet(name, terrain, planetOne > 24);
-      return newPlanet;
-    }
-    catch(e){
-      alert('Error al descargar el planeta solicitado: ' + e);
-    }
-  }
+    const fetchedPlanet = await axios.get(`https://swapi.dev/api/planets/${id}/`);
+    const { name, terrain, rotation_period } = fetchedPlanet.data;
+    return new Planet(name, terrain, rotation_period > 24);
+  };
 
-  addNewPlanetToCollection = (newPlanet) => {
-    const { planetCollection } = this.state;
-    planetCollection.push(newPlanet);
-    this.setState({ planetCollection });
+  handlePlanetFetch = async (planetId) => {
+    try {
+      const newPlanet = await this.fetchPlanetById(planetId);
+      const { planetCollection } = this.state;
+      planetCollection.push(newPlanet);
+      this.setState({ planetCollection });
+    }
+    catch (e) {
+      alert('Error al descargar el planeta: ' + e);
+    }
   };
 
   render() {
@@ -48,7 +48,7 @@ class App extends React.Component {
         <div className="container">
           <MainHeader />
           <div className="row">
-            <UserInput onAddNewPlanet={this.addNewPlanetToCollection} />
+            <UserInput onFetchPlanet={this.handlePlanetFetch} />
             <PlanetTable planetCollection={this.state.planetCollection} />
           </div>
         </div>
